@@ -27,6 +27,13 @@ public class CurrencyAPI {
         return result;
     }
 
+    public static String buildRequestToday() {
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        String result = urlNBU + "?start=" + formatter.format(date) +
+                "&end=" + formatter.format(date) + "&sort=exchangedate&json";
+        return result;
+    }
 
     public static String getJsonFromAPI(String url) {
         try {
@@ -50,8 +57,12 @@ public class CurrencyAPI {
         return null;
     }
 
-    public static Currency[] getCurrenciesFromJSON(String jsonResponse) {
+    public static Currency[] getAllCurrencies() {
+        return gson.fromJson(getJsonFromAPI(buildRequestToday()), Currency[].class);
+    }
 
-        return gson.fromJson(jsonResponse, Currency[].class);
+    public static Currency getCurrencyFromJSON(String jsonResponse) {
+
+        return gson.fromJson(jsonResponse, Currency.class);
     }
 }
